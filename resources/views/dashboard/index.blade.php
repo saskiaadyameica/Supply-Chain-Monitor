@@ -2,125 +2,84 @@
 
 @section('content')
 
-<div class="container-fluid">
+<div class="dashboard-container">
 
-    <div class="mb-4">
+    <div class="page-title">
 
-        <h2 class="fw-bold">
-            Welcome Back 👋
-        </h2>
 
-        <p class="text-secondary">
-            Monitor your global supply chain in one dashboard.
+        <p>
+            Supply Chain Overview
         </p>
 
     </div>
 
-    {{-- Statistics Card --}}
+    <!-- Overview -->
 
-    <div class="stat-grid">
+    <div class="overview-grid">
 
-        @include('components.stat-card',[
-            'icon'=>'🌍',
-            'title'=>'Countries',
-            'value'=>'12'
-        ])
+        <div class="overview-card">
 
-        @include('components.stat-card',[
-            'icon'=>'🌦',
-            'title'=>'Weather Alerts',
-            'value'=>'3'
-        ])
+            <i class="bi bi-globe2"></i>
 
-        @include('components.stat-card',[
-            'icon'=>'💱',
-            'title'=>'Currencies',
-            'value'=>'24'
-        ])
+            <h3>{{ $totalCountries }}</h3>
 
-        @include('components.stat-card',[
-            'icon'=>'⚠',
-            'title'=>'Risk Score',
-            'value'=>'Medium'
-        ])
-
-    </div>
-
-    {{-- Analytics --}}
-
-    <div class="dashboard-grid mt-4">
-
-        <div class="chart-card">
-
-            <div class="section-header">
-
-                <h5>GDP Trend</h5>
-
-                <small>Coming Soon</small>
-
-            </div>
-
-            <div class="chart-placeholder">
-
-                📈
-
-            </div>
+            <span>Countries</span>
 
         </div>
 
-        <div class="chart-card">
+        <div class="overview-card">
 
-            <div class="section-header">
+            <i class="bi bi-cloud-sun"></i>
 
-                <h5>Risk Trend</h5>
+            <h3>Live</h3>
 
-                <small>Coming Soon</small>
+            <span>Weather</span>
 
-            </div>
+        </div>
 
-            <div class="chart-placeholder">
+        <div class="overview-card">
 
-                📊
+            <i class="bi bi-newspaper"></i>
 
-            </div>
+            <h3>0</h3>
+
+            <span>News</span>
+
+        </div>
+
+        <div class="overview-card">
+
+            <i class="bi bi-shield-check"></i>
+
+            <h3>Low</h3>
+
+            <span>Risk</span>
 
         </div>
 
     </div>
 
-    {{-- World Map --}}
+    <!-- Bottom -->
 
-    <div class="map-card mt-4">
+    <div class="bottom-grid">
 
-        <div class="section-header">
+        <div class="panel-card">
 
-            <h5>Global Monitoring Map</h5>
+            <h5>Latest Global News</h5>
 
-            <small>Leaflet Map</small>
+            <hr>
 
-        </div>
-
-        <div class="map-placeholder">
-
-            🌍
+            <p>No news available.</p>
 
         </div>
 
-    </div>
+        <div class="panel-card">
 
-    {{-- News --}}
+            <h5>High Risk Countries</h5>
 
-    <div class="news-card mt-4">
+            <hr>
 
-        <div class="section-header">
-
-            <h5>Latest News</h5>
-
-        </div>
-
-        <div class="news-placeholder">
-
-            No news available.
+            <p>No risk analysis available.</p>
 
         </div>
 
@@ -128,4 +87,108 @@
 
 </div>
 
+    <div class="chart-section mt-4">
+
+        <h4 class="mb-4 fw-bold">
+            Data Visualization
+        </h4>
+
+        <div class="chart-grid">
+
+            <div class="chart-card">
+
+                <h6>GDP Trend</h6>
+
+                <canvas id="gdpChart"></canvas>
+
+            </div>
+
+            <div class="chart-card">
+
+                <h6>Inflation Trend</h6>
+
+                <canvas id="inflationChart"></canvas>
+
+            </div>
+
+            <div class="chart-card">
+
+                <h6>Currency Trend</h6>
+
+                <canvas id="currencyChart"></canvas>
+
+            </div>
+
+            <div class="chart-card">
+
+                <h6>Risk Trend</h6>
+
+                <canvas id="riskChart"></canvas>
+
+            </div>
+
+        </div>
+
+    </div>
+
 @endsection
+
+@push('scripts')
+
+<script>
+
+const chartData = {
+
+labels:['Jan','Feb','Mar','Apr','May','Jun'],
+
+datasets:[{
+
+data:[12,18,14,20,16,24],
+
+borderColor:'#D98CA3',
+
+backgroundColor:'rgba(217,140,163,.2)',
+
+fill:true,
+
+tension:.4
+
+}]
+
+};
+
+new Chart(document.getElementById('gdpChart'),{
+
+type:'line',
+
+data:chartData
+
+});
+
+new Chart(document.getElementById('inflationChart'),{
+
+type:'line',
+
+data:chartData
+
+});
+
+new Chart(document.getElementById('currencyChart'),{
+
+type:'line',
+
+data:chartData
+
+});
+
+new Chart(document.getElementById('riskChart'),{
+
+type:'line',
+
+data:chartData
+
+});
+
+</script>
+
+@endpush

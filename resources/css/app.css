@@ -1,3 +1,197 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* ==========================
+   Countries
+========================== */
+
+.country-card{
+
+    border:none;
+
+    border-radius:22px;
+
+    padding:18px;
+
+    box-shadow:0 10px 30px rgba(0,0,0,.05);
+
+}
+
+.search-box{
+
+    width:360px;
+
+    border-radius:12px;
+
+    border:1px solid #edd7df;
+
+    padding:12px 18px;
+
+}
+
+.search-box:focus{
+
+    border-color:#d98ca3;
+
+    box-shadow:none;
+
+}
+
+.btn-pink{
+
+    background:#d98ca3;
+
+    color:white;
+
+    border:none;
+
+    padding:11px 22px;
+
+    border-radius:12px;
+
+    font-weight:600;
+
+}
+
+.btn-pink:hover{
+
+    background:#ca7894;
+
+    color:white;
+
+}
+
+.country-table{
+
+    width:100%;
+
+    margin-bottom:0;
+
+}
+
+.country-table thead{
+
+    background:#fff7fa;
+
+}
+
+.country-table thead th{
+
+    border:none;
+
+    border-bottom:2px solid #f4dde6;
+
+    padding:18px;
+
+    color:#4f4242;
+
+    font-weight:700;
+
+    white-space:nowrap;
+
+}
+
+.country-table tbody td{
+
+    padding:18px;
+
+    vertical-align:middle;
+
+    border-top:1px solid #f5edf0;
+
+}
+
+.country-table tbody tr{
+
+    transition:.2s;
+
+}
+
+.country-table tbody tr:hover{
+
+    background:#fffafb;
+
+}
+
+.country-flag{
+
+    width:52px;
+
+    height:36px;
+
+    object-fit:cover;
+
+    border-radius:8px;
+
+    margin-right:16px;
+
+    box-shadow:0 3px 8px rgba(0,0,0,.12);
+
+}
+
+.btn-detail{
+
+    width:90px;
+
+    background:#f6d6e1;
+
+    border:none;
+
+    color:#a45b76;
+
+    border-radius:20px;
+
+    font-size:14px;
+
+    font-weight:600;
+
+    padding:8px 0;
+
+}
+
+.btn-detail:hover{
+
+    background:#d98ca3;
+
+    color:white;
+
+}
+
+.pagination{
+
+    gap:8px;
+
+}
+
+.page-link{
+
+    border:none;
+
+    border-radius:10px !important;
+
+    color:#b36682;
+
+    background:#ffffff;
+
+    padding:9px 15px;
+
+    box-shadow:none;
+
+}
+
+.page-item.active .page-link{
+
+    background:#d98ca3;
+
+    color:white;
+
+}
+
+.page-link:hover{
+
+    background:#f7dce5;
+
+    color:#b36682;
+
+}

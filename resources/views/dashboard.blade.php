@@ -20,7 +20,7 @@
     <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}">
 
 </head>
-
+@stack('scripts')
 <body>
 
 <div class="wrapper">

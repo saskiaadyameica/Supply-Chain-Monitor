@@ -22,7 +22,8 @@
         </li>
 
         <li>
-            <a href="#">
+            <li class="{{ request()->routeIs('weather.*') ? 'active' : '' }}">
+            <a href="{{ route('weather.index') }}">
                 <i class="bi bi-cloud-sun"></i>
                 <span>Weather</span>
             </a>

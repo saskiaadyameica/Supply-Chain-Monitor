@@ -34,5 +34,8 @@ return [
             'channel' => env('SLACK_BOT_USER_DEFAULT_CHANNEL'),
         ],
     ],
+    'restcountries' => [
+        'key' => env('REST_COUNTRIES_API_KEY'),
+    ],
 
 ];

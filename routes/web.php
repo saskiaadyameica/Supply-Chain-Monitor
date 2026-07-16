@@ -3,22 +3,21 @@
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
-
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-*/
+use App\Http\Controllers\CountryController;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\WeatherController;
 
 // Halaman utama
+Route::get('/weather', [WeatherController::class, 'index'])
+    ->name('weather.index');
+Route::post('/weather', [WeatherController::class, 'check'])
+    ->name('weather.check');
 Route::get('/', function () {
 
-    // Jika sudah login → langsung ke dashboard
     if (Auth::check()) {
         return redirect()->route('dashboard');
     }
 
-    // Jika belum login → ke halaman login
     return redirect()->route('login');
 
 })->name('home');
@@ -29,8 +28,15 @@ Route::get('/dashboard', function () {
     return view('dashboard.index');
 })->middleware('auth')->name('dashboard');
 
+Route::middleware('auth')->group(function () {
 
-// Profile (sementara kita biarkan, nanti bisa kita hapus jika tidak dipakai)
+    Route::get('/countries', [CountryController::class, 'index'])
+        ->name('countries.index');
+
+    Route::post('/countries/sync', [CountryController::class, 'sync'])
+        ->name('countries.sync');
+
+});
 Route::middleware('auth')->group(function () {
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -42,8 +48,8 @@ Route::middleware('auth')->group(function () {
         // Countries
     Route::get('/countries', [App\Http\Controllers\CountryController::class, 'index'])
         ->name('countries.index');
+    Route::get('/dashboard', [DashboardController::class, 'index'])
+    ->name('dashboard');    
 });
 
-
-// Authentication Route dari Breeze
 require __DIR__.'/auth.php';

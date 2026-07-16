@@ -16,13 +16,18 @@ return new class extends Migration
             $table->id();
 
             $table->string('name');
-            $table->string('code', 3)->unique();
-            $table->string('capital');
-            $table->string('region');
-            $table->string('currency', 10);
 
-            $table->decimal('latitude', 10, 6);
-            $table->decimal('longitude', 10, 6);
+            $table->string('code',10)->unique();
+
+            $table->string('capital')->nullable();
+
+            $table->string('region')->nullable();
+
+            $table->bigInteger('population')->nullable();
+
+            $table->string('currency')->nullable();
+
+            $table->string('flag')->nullable();
 
             $table->timestamps();
 
