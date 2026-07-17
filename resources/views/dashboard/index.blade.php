@@ -14,8 +14,9 @@
     </div>
 
     <!-- Overview -->
+<div class="overview-grid">
 
-    <div class="overview-grid">
+    <a href="{{ route('countries.index') }}" class="text-decoration-none text-dark">
 
         <div class="overview-card">
 
@@ -25,39 +26,65 @@
 
             <span>Countries</span>
 
+            <small class="d-block mt-2" style="visibility:hidden;">
+            Indonesia
+            </small>
+
         </div>
+
+    </a>
+
+    <a href="{{ route('weather.index') }}" class="text-decoration-none text-dark">
 
         <div class="overview-card">
 
-            <i class="bi bi-cloud-sun"></i>
+            @if($weather)
 
-            <h3>Live</h3>
+                <i class="{{ $weatherIcon['icon'] }}"></i>
 
-            <span>Weather</span>
+                <h3>{{ round($weather['temperature_2m']) }}°C</h3>
 
-        </div>
+                <span>{{ $weatherIcon['text'] }}</span>
 
-        <div class="overview-card">
+                <small class="d-block text-muted mt-2">
+                    Indonesia
+                </small>
 
-            <i class="bi bi-newspaper"></i>
+            @else
 
-            <h3>0</h3>
+                <i class="bi bi-cloud-sun"></i>
 
-            <span>News</span>
+                <h3>--°C</h3>
 
-        </div>
+                <span>Weather</span>
 
-        <div class="overview-card">
-
-            <i class="bi bi-shield-check"></i>
-
-            <h3>Low</h3>
-
-            <span>Risk</span>
+            @endif
 
         </div>
+
+    </a>
+
+    <div class="overview-card">
+
+        <i class="bi bi-newspaper"></i>
+
+        <h3>0</h3>
+
+        <span>News</span>
 
     </div>
+
+    <div class="overview-card">
+
+        <i class="bi bi-shield-check"></i>
+
+        <h3>Low</h3>
+
+        <span>Risk</span>
+
+    </div>
+
+</div>
 
     <!-- Bottom -->
 

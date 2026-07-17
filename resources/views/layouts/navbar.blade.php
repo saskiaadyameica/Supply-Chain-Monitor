@@ -11,7 +11,9 @@
     <div class="d-flex align-items-center gap-3">
 
         <span class="fw-semibold">
-            {{ Auth::user()->name }}
+
+            {{ Auth::check() ? Auth::user()->name : 'Admin' }}
+
         </span>
 
         <form method="POST" action="{{ route('logout') }}">

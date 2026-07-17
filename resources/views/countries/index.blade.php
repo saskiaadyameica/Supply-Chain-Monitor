@@ -2,27 +2,26 @@
 
 @section('content')
 
-<div class="container-fluid">
+<div class="page-header">
 
-    <div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
 
-        <div>
-
-            <h2 class="fw-bold mb-1">
-                Countries
-            </h2>
+        <h2 class="fw-bold mb-1">
+            Countries
+        </h2>
 
             <p class="text-secondary mb-0">
                 Global Country Dashboard
 
         </div>
 
-        <form action="{{ route('countries.sync') }}" method="POST">
+        <form action="{{ route('countries.sync') }}">
 
             @csrf
 
-            <button class="btn btn-pink">
+            <button type="submit" class="btn btn-pink">
 
+                <i class="bi bi-arrow-repeat me-2"></i>
                 Sync Countries
 
             </button>
@@ -169,8 +168,11 @@
 
             <div class="d-flex justify-content-between align-items-center mt-4">
 
-                <div class="text-muted">
-
+                <div class="text-secondary">
+                    Showing {{ $countries->firstItem() }}
+                    to {{ $countries->lastItem() }}
+                    of {{ $countries->total() }} results
+               
                 </div>
 
                 {{ $countries->links() }}

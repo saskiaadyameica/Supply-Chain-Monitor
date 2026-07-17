@@ -30,7 +30,7 @@
 
                 @csrf
 
-                <div class="row align-items-end">
+                <div class="row align-items-end mb-4">
 
                     <div class="col-md-8">
 
@@ -39,15 +39,15 @@
                         </label>
 
                         <select
-                            name="country_id"
-                            class="form-select form-select-lg"
-                            required>
+                                id="countrySelect"
+                                name="country_id"
+                                class="form-select">
 
                             @foreach($countries as $item)
 
                                 <option
                                     value="{{ $item->id }}"
-                                    @selected(isset($country) && $country->id == $item->id)>
+                                    {{ isset($country) && $country->id==$item->id ? 'selected' : '' }}>
 
                                     {{ $item->name }}
 
@@ -60,9 +60,9 @@
                     </div>
 
                     <div class="col-md-4">
-
-                        <button
-                            class="btn btn-pink w-100">
+                                <button
+                                    type="submit"
+                                    class="btn btn-pink w-100">
 
                             Check Weather
 
@@ -94,105 +94,168 @@
 
             </div>
 
-            <div class="row g-4">
+        <div class="row g-4">
 
-                <div class="col-md-3">
+            {{-- Weather Status --}}
+            <div class="col-md-3">
 
-                    <div class="card text-center shadow-sm border-0 rounded-4">
+                <div class="card text-center shadow-sm border-0 rounded-4 h-100">
 
-                        <div class="card-body">
+                    <div class="card-body d-flex flex-column justify-content-center">
 
-                            <h6 class="text-secondary">
-                                Temperature
-                            </h6>
+                        <i class="{{ $weatherIcon['icon'] }}"
+                        style="font-size:60px;color:#f5b400;"></i>
 
-                            <h2 class="fw-bold">
+                        <h5 class="fw-bold mt-3 mb-1">
 
-                                {{ $weather['temperature_2m'] }} °C
+                            {{ $weatherIcon['text'] }}
 
-                            </h2>
+                        </h5>
 
-                        </div>
+                        <h2 class="fw-bold text-primary">
 
-                    </div>
+                            {{ $weather['temperature_2m'] }}°C
 
-                </div>
-
-                <div class="col-md-3">
-
-                    <div class="card text-center shadow-sm border-0 rounded-4">
-
-                        <div class="card-body">
-
-                            <h6 class="text-secondary">
-                                Wind Speed
-                            </h6>
-
-                            <h2 class="fw-bold">
-
-                                {{ $weather['wind_speed_10m'] }} km/h
-
-                            </h2>
-
-                        </div>
+                        </h2>
 
                     </div>
 
                 </div>
 
-                <div class="col-md-3">
+            </div>
 
-                    <div class="card text-center shadow-sm border-0 rounded-4">
+            {{-- Wind --}}
+            <div class="col-md-3">
 
-                        <div class="card-body">
+                <div class="card text-center shadow-sm border-0 rounded-4 h-100">
 
-                            <h6 class="text-secondary">
-                                Rainfall
-                            </h6>
+                    <div class="card-body d-flex flex-column justify-content-center">
 
-                            <h2 class="fw-bold">
+                        <i class="bi bi-wind"
+                        style="font-size:45px;color:#6c63ff;"></i>
 
-                                {{ $weather['rain'] }} mm
+                        <h6 class="text-secondary mt-3">
 
-                            </h2>
+                            Wind Speed
 
-                        </div>
+                        </h6>
+
+                        <h2 class="fw-bold">
+
+                            {{ $weather['wind_speed_10m'] }}
+
+                        </h2>
+
+                        <small class="text-muted">
+
+                            km/h
+
+                        </small>
 
                     </div>
 
                 </div>
 
-                <div class="col-md-3">
+            </div>
 
-                    <div class="card text-center shadow-sm border-0 rounded-4">
+            {{-- Rain --}}
+            <div class="col-md-3">
 
-                        <div class="card-body">
+                <div class="card text-center shadow-sm border-0 rounded-4 h-100">
 
-                            <h6 class="text-secondary">
-                                Storm Risk
-                            </h6>
+                    <div class="card-body d-flex flex-column justify-content-center">
 
-                            <h2 class="fw-bold">
+                        <i class="bi bi-cloud-rain-fill"
+                        style="font-size:45px;color:#2b7de9;"></i>
 
-                                @if($weather['wind_speed_10m'] >= 40)
+                        <h6 class="text-secondary mt-3">
 
-                                    High
+                            Rainfall
 
-                                @elseif($weather['wind_speed_10m'] >= 20)
+                        </h6>
 
-                                    Medium
+                        <h2 class="fw-bold">
 
-                                @else
+                            {{ $rainfall }}
 
-                                    Low
+                        </h2>
 
-                                @endif
+                        <small class="text-muted">
 
-                            </h2>
+                            mm
 
-                        </div>
+                        </small>
 
                     </div>
+
+                </div>
+
+            </div>
+
+            {{-- Storm --}}
+            <div class="col-md-3">
+
+                <div class="card text-center shadow-sm border-0 rounded-4 h-100">
+
+                    <div class="card-body d-flex flex-column justify-content-center">
+
+                        @php
+
+                            if($weather['wind_speed_10m'] >= 40){
+
+                                $stormIcon="bi-cloud-lightning-rain-fill";
+                                $stormText="High";
+
+                            }elseif($weather['wind_speed_10m'] >=20){
+
+                                $stormIcon="bi-cloud-lightning-fill";
+                                $stormText="Medium";
+
+                            }else{
+
+                                $stormIcon="bi-shield-check";
+                                $stormText="Low";
+
+                            }
+
+                        @endphp
+
+                        <i class="bi {{ $stormIcon }}"
+                        style="font-size:45px;color:#ff7b00;"></i>
+
+                        <h6 class="text-secondary mt-3">
+
+                            Storm Risk
+
+                        </h6>
+
+                        <h2 class="fw-bold">
+
+                            {{ $stormText }}
+
+                        </h2>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+            <hr class="my-5">
+
+            <div class="card shadow-sm border-0 rounded-4">
+
+                <div class="card-body">
+
+                    <h4 class="fw-bold mb-4">
+
+                        Weather Map
+
+                    </h4>
+
+                    <div id="weatherMap"></div>
 
                 </div>
 
@@ -207,3 +270,64 @@
 </div>
 
 @endsection
+
+@push('scripts')
+
+@if(isset($country))
+
+<script>
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    const map = L.map('weatherMap').setView(
+        [
+            {{ $country->latitude }},
+            {{ $country->longitude }}
+        ],
+        5
+    );
+
+    L.tileLayer(
+        'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+        {
+            attribution: '© OpenStreetMap'
+        }
+    ).addTo(map);
+
+    L.marker([
+        {{ $country->latitude }},
+        {{ $country->longitude }}
+    ])
+    .addTo(map)
+    .bindPopup(`
+        <b>{{ $country->name }}</b><br>
+        Temperature : {{ $weather['temperature_2m'] }} °C<br>
+        Wind : {{ $weather['wind_speed_10m'] }} km/h<br>
+        Rain : {{ $rainfall }} mm
+    `)
+    .openPopup();
+
+});
+
+</script>
+
+@endif
+
+<script>
+
+$(document).ready(function(){
+
+    $('#countrySelect').select2({
+
+        placeholder:'Search country...',
+
+        width:'100%'
+
+    });
+
+});
+
+</script>
+
+@endpush
+            
