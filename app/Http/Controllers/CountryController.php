@@ -48,14 +48,20 @@ class CountryController extends Controller
 
             $data = $response->json()['data'];
 
-            foreach ($data['objects'] as $country) {
+
+        foreach ($data['objects'] as $country) {
+            
+        dd($country['codes']);
+
                 Country::updateOrCreate(
 
                     [
-                        'code' => $country['codes']['alpha_2']
+                        'code' => $country['codes']['alpha_2'] ?? ''
                     ],
 
                     [
+
+                        'code' => $country['codes']['alpha_2'] ?? '',
 
                         'name' => $country['names']['common'] ?? '',
 
@@ -67,15 +73,19 @@ class CountryController extends Controller
 
                         'currency' => $country['currencies'][0]['name'] ?? '',
 
+                        'currency_code' => $country['currencies'][0]['code'] ?? '',
+
+                        'currency_symbol' => $country['currencies'][0]['symbol'] ?? '',
+
                         'flag' => $country['flag']['url_png'] ?? '',
 
                         'latitude' => $country['coordinates']['lat'] ?? null,
 
                         'longitude' => $country['coordinates']['lng'] ?? null,
-
                     ]
-
                 );
+
+                $countryModel = Country::where('code', $country['codes']['alpha_2'])->first();
 
             }
 

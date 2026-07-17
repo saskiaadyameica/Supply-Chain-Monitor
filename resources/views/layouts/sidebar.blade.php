@@ -30,7 +30,7 @@
         </li>
 
         <li>
-            <a href="#">
+            <a href="{{ route('currency.index') }}">
                 <i class="bi bi-currency-exchange"></i>
                 <span>Currency</span>
             </a>

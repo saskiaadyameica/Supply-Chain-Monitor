@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CountryController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\WeatherController;
+use App\Http\Controllers\CurrencyController;
 
 // Halaman utama
 Route::get('/weather', [WeatherController::class, 'index'])
@@ -22,11 +23,12 @@ Route::get('/', function () {
 
 })->name('home');
 
+Route::get('/currency', [CurrencyController::class, 'index'])
+    ->name('currency.index');
 
-// Dashboard Admin
-Route::get('/dashboard', function () {
-    return view('dashboard.index');
-})->middleware('auth')->name('dashboard');
+Route::get('/dashboard', [DashboardController::class, 'index'])
+    ->middleware('auth')
+    ->name('dashboard');
 
 Route::middleware('auth')->group(function () {
 
@@ -45,11 +47,9 @@ Route::middleware('auth')->group(function () {
 
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-        // Countries
-    Route::get('/countries', [App\Http\Controllers\CountryController::class, 'index'])
-        ->name('countries.index');
-    Route::get('/dashboard', [DashboardController::class, 'index'])
-    ->name('dashboard');    
+    Route::post('/currency', [CurrencyController::class, 'check'])
+    ->name('currency.check');
+    
 });
 
 require __DIR__.'/auth.php';

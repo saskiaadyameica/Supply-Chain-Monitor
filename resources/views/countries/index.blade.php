@@ -15,18 +15,18 @@
 
         </div>
 
-        <form action="{{ route('countries.sync') }}">
+<form action="{{ route('countries.sync') }}" method="POST">
 
-            @csrf
+    @csrf
 
-            <button type="submit" class="btn btn-pink">
+    <button type="submit" class="btn btn-pink">
 
-                <i class="bi bi-arrow-repeat me-2"></i>
-                Sync Countries
+        <i class="bi bi-arrow-repeat me-2"></i>
+        Sync Countries
 
-            </button>
+    </button>
 
-        </form>
+</form>
 
     </div>
 
