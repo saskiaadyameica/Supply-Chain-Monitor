@@ -7,8 +7,11 @@ use App\Http\Controllers\CountryController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\WeatherController;
 use App\Http\Controllers\CurrencyController;
+use App\Http\Controllers\PortController;
 
 // Halaman utama
+
+Route::get('/ports', [PortController::class, 'index'])->name('ports.index');
 Route::get('/weather', [WeatherController::class, 'index'])
     ->name('weather.index');
 Route::post('/weather', [WeatherController::class, 'check'])
@@ -49,7 +52,7 @@ Route::middleware('auth')->group(function () {
 
     Route::post('/currency', [CurrencyController::class, 'check'])
     ->name('currency.check');
-    
+
 });
 
 require __DIR__.'/auth.php';

@@ -37,9 +37,9 @@
         </li>
 
         <li>
-            <a href="#">
+            <a href="{{ route('ports.index') }}">
                 <i class="bi bi-geo-alt"></i>
-                <span>Ports</span>
+                <span>Port</span>
             </a>
         </li>
 

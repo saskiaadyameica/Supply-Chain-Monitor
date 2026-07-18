@@ -105,7 +105,7 @@
 
                     <button
                         type="submit"
-                        class="btn btn-primary w-100">
+                        class="btn btn-pink w-100">
 
                         <i class="bi bi-currency-exchange"></i>
 
