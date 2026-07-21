@@ -7,6 +7,7 @@
 
     <ul class="menu">
 
+        {{-- ================= ADMIN ================= --}}
         @if(auth()->user()->role == 'admin')
 
             <li class="{{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
@@ -16,27 +17,28 @@
                 </a>
             </li>
 
-            <li>
+            <li class="{{ request()->routeIs('admin.users.*') ? 'active' : '' }}">
                 <a href="{{ route('admin.users.index') }}">
                     <i class="bi bi-people-fill"></i>
                     <span>Users</span>
                 </a>
             </li>
 
-            <li>
-                <a href="#">
+            <li class="{{ request()->routeIs('admin.dataset.*') ? 'active' : '' }}">
+                <a href="{{ route('admin.dataset.index') }}">
                     <i class="bi bi-geo-alt"></i>
                     <span>Port Dataset</span>
                 </a>
             </li>
 
-            <li>
-                <a href="#">
+            <li class="{{ request()->routeIs('admin.articles.*') ? 'active' : '' }}">
+                <a href="{{ route('admin.articles.index') }}">
                     <i class="bi bi-newspaper"></i>
                     <span>Analysis Articles</span>
                 </a>
             </li>
 
+        {{-- ================= USER ================= --}}
         @else
 
             <li class="{{ request()->routeIs('dashboard') ? 'active' : '' }}">
@@ -81,14 +83,14 @@
                 </a>
             </li>
 
-            <li>
+            <li class="{{ request()->routeIs('analysis.*') ? 'active' : '' }}">
                 <a href="#">
-                    <i class="bi bi-bar-chart"></i>
-                    <span>Analytics</span>
+                    <i class="bi bi-bar-chart-line"></i>
+                    <span>Analysis</span>
                 </a>
             </li>
 
-            <li>
+            <li class="{{ request()->routeIs('favorites.*') ? 'active' : '' }}">
                 <a href="#">
                     <i class="bi bi-bookmark-heart"></i>
                     <span>Favorites</span>

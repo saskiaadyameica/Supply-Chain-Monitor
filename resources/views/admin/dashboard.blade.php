@@ -20,7 +20,7 @@
 
         </a>
 
-        <a href="#" class="text-decoration-none text-dark">
+        <a href="{{ route('admin.dataset.index') }}">
 
             <div class="overview-card">
                 <i class="bi bi-geo-alt-fill"></i>
@@ -30,8 +30,7 @@
 
         </a>
 
-        <a href="#" class="text-decoration-none text-dark">
-
+        <a href="{{ route('admin.articles.index') }}" class="text-decoration-none text-dark">
             <div class="overview-card">
                 <i class="bi bi-newspaper"></i>
                 <h3>Article</h3>

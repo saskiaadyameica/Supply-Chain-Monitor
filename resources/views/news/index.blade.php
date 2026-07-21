@@ -169,7 +169,7 @@
                         <a
                             href="{{ $article['url'] }}"
                             target="_blank"
-                            class="btn btn-outline-primary w-100">
+                            class="btn btn-outline-primary w-100 mb-2">
 
                             Read More
 

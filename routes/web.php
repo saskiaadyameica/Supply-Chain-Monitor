@@ -10,20 +10,16 @@ use App\Http\Controllers\CurrencyController;
 use App\Http\Controllers\PortController;
 use App\Http\Controllers\NewsController;
 use App\Http\Controllers\AdminController;
-use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\SentimentController;
+use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Admin\DatasetController;
 
-// Halaman utama
+/*
+|--------------------------------------------------------------------------
+| Public Routes
+|--------------------------------------------------------------------------
+*/
 
-Route::get('/sentiment', [SentimentController::class, 'index'])
-    ->name('sentiment.index');
-
-Route::get('/news', [NewsController::class, 'index'])->name('news.index');
-Route::get('/ports', [PortController::class, 'index'])->name('ports.index');
-Route::get('/weather', [WeatherController::class, 'index'])
-    ->name('weather.index');
-Route::post('/weather', [WeatherController::class, 'check'])
-    ->name('weather.check');
 Route::get('/', function () {
 
     if (Auth::check()) {
@@ -34,14 +30,40 @@ Route::get('/', function () {
 
 })->name('home');
 
+Route::get('/news', [NewsController::class, 'index'])
+    ->name('news.index');
+
+Route::get('/ports', [PortController::class, 'index'])
+    ->name('ports.index');
+
+Route::get('/weather', [WeatherController::class, 'index'])
+    ->name('weather.index');
+
+Route::post('/weather', [WeatherController::class, 'check'])
+    ->name('weather.check');
+
 Route::get('/currency', [CurrencyController::class, 'index'])
     ->name('currency.index');
 
-Route::get('/dashboard', [DashboardController::class, 'index'])
-    ->middleware('auth')
-    ->name('dashboard');
+Route::get('/sentiment', [SentimentController::class, 'index'])
+    ->name('sentiment.index');
+
+/*
+|--------------------------------------------------------------------------
+| Auth Routes
+|--------------------------------------------------------------------------
+*/
 
 Route::middleware('auth')->group(function () {
+
+    Route::get('/dashboard', [DashboardController::class, 'index'])
+        ->name('dashboard');
+
+    /*
+    |--------------------------------------------------------------------------
+    | Countries
+    |--------------------------------------------------------------------------
+    */
 
     Route::get('/countries', [CountryController::class, 'index'])
         ->name('countries.index');
@@ -52,60 +74,87 @@ Route::middleware('auth')->group(function () {
     Route::post('/countries/sync-economics', [CountryController::class, 'syncEconomics'])
         ->name('countries.syncEconomics');
 
-});
-Route::middleware('auth')->group(function () {
-
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    /*
+    |--------------------------------------------------------------------------
+    | Currency
+    |--------------------------------------------------------------------------
+    */
 
     Route::post('/currency', [CurrencyController::class, 'check'])
-    ->name('currency.check');
+        ->name('currency.check');
 
-    Route::get('/test-worldbank', function () {
+    /*
+    |--------------------------------------------------------------------------
+    | Profile
+    |--------------------------------------------------------------------------
+    */
 
-        $response = \Illuminate\Support\Facades\Http::withoutVerifying()
-            ->get(
-                'https://api.worldbank.org/v2/country/AF/indicator/NY.GDP.MKTP.CD',
-                [
-                    'format' => 'json',
-                    'per_page' => 1,
-                ]
-            );
+    Route::get('/profile', [ProfileController::class, 'edit'])
+        ->name('profile.edit');
 
-        dd(
-            $response->status(),
-            $response->body()
-        );
-    });
+    Route::patch('/profile', [ProfileController::class, 'update'])
+        ->name('profile.update');
 
+    Route::delete('/profile', [ProfileController::class, 'destroy'])
+        ->name('profile.destroy');
 
-        Route::get('/test-worldbank', function () {
+    /*
+    |--------------------------------------------------------------------------
+    | Admin
+    |--------------------------------------------------------------------------
+    */
 
-        $service = new \App\Services\WorldBankService();
+    Route::prefix('admin')->group(function () {
 
-        dd($service->getEconomicData('US'));
+        Route::get('/dashboard', [AdminController::class, 'dashboard'])
+            ->name('admin.dashboard');
 
-    });
+        Route::resource('articles', \App\Http\Controllers\Admin\ArticleController::class)
+            ->names('admin.articles');
 
-    Route::middleware(['auth'])->group(function () {
+        /*
+        |--------------------------------------------------------------------------
+        | Users
+        |--------------------------------------------------------------------------
+        */
 
-    Route::get('/admin/dashboard',[AdminController::class,'dashboard'])
-        ->name('admin.dashboard');
+        Route::resource('users', UserController::class)
+            ->names('admin.users');
 
-    });
+        /*
+        |--------------------------------------------------------------------------
+        | Port Dataset
+        |--------------------------------------------------------------------------
+        */
 
-    Route::middleware('auth')->group(function () {
+        Route::get('/dataset', [DatasetController::class, 'index'])
+            ->name('admin.dataset.index');
 
-    Route::get('/admin/dashboard', [AdminController::class, 'dashboard'])
-        ->name('admin.dashboard');
+        Route::get('/dataset/create', [DatasetController::class, 'create'])
+            ->name('admin.dataset.create');
 
-    Route::resource('admin/users', \App\Http\Controllers\Admin\UserController::class)
-        ->names('admin.users');
+        Route::post('/dataset', [DatasetController::class, 'store'])
+            ->name('admin.dataset.store');
+
+        Route::get('/dataset/{id}/edit', [DatasetController::class, 'edit'])
+            ->name('admin.dataset.edit');
+
+        Route::put('/dataset/{id}', [DatasetController::class, 'update'])
+            ->name('admin.dataset.update');
+
+        Route::delete('/dataset/{id}', [DatasetController::class, 'destroy'])
+            ->name('admin.dataset.destroy');
+        Route::post('/dataset/upload', [DatasetController::class,'upload'])
+            ->name('admin.dataset.upload');
+
     });
 
 });
+
+/*
+|--------------------------------------------------------------------------
+| Auth Scaffolding
+|--------------------------------------------------------------------------
+*/
 
 require __DIR__.'/auth.php';
