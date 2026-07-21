@@ -4,21 +4,31 @@ namespace App\Http\Controllers;
 
 use App\Models\Country;
 use Illuminate\Support\Facades\Http;
+use App\Services\WorldBankService;
+use App\Models\CountryEconomic;
 
 class CountryController extends Controller
 {
+    private $worldBank;
+
+    public function __construct(WorldBankService $worldBank)
+    {
+        $this->worldBank = $worldBank;
+    }
+    
     public function index()
     {
     $search = request('search');
 
-    $countries = Country::when($search, function ($query) use ($search) {
+    $countries = Country::with('economics')
+        ->when($search, function ($query) use ($search) {
 
-        $query->where('name', 'like', "%{$search}%");
+            $query->where('name', 'like', "%{$search}%");
 
-    })
-    ->orderBy('name')
-    ->paginate(15)
-    ->withQueryString();
+        })
+        ->orderBy('name')
+        ->paginate(15)
+        ->withQueryString();
 
     return view('countries.index', compact('countries', 'search'));
     }
@@ -50,8 +60,6 @@ class CountryController extends Controller
 
 
         foreach ($data['objects'] as $country) {
-            
-        dd($country['codes']);
 
                 Country::updateOrCreate(
 
@@ -101,4 +109,50 @@ class CountryController extends Controller
 
         );
     }
+
+    public function syncEconomics()
+    {
+        $batch = 2;
+
+        $offset = request()->get('offset', 0);
+
+        $countries = Country::whereNotNull('code')
+            ->where('code', '!=', '')
+            ->orderBy('id')
+            ->skip($offset)
+            ->take($batch)
+            ->get();
+
+        foreach ($countries as $country) {
+
+            $economics = $this->worldBank->getEconomicData($country->code);
+
+            CountryEconomic::updateOrCreate(
+                [
+                    'country_id' => $country->id,
+                ],
+                [
+                    'gdp' => $economics['gdp'],
+                    'inflation' => $economics['inflation'],
+                    'export' => $economics['export'],
+                    'import' => $economics['import'],
+                    'year' => now()->year,
+                ]
+            );
+
+            usleep(300000);
+        }
+
+        $nextOffset = $offset + $countries->count();
+
+        $finished = $nextOffset >= Country::count();
+
+        return response()->json([
+            'finished' => $finished,
+            'nextOffset' => $nextOffset,
+            'processed' => $nextOffset,
+            'total' => Country::count(),
+        ]);
+    }
+
 }

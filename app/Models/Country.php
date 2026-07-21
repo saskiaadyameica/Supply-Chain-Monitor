@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Country extends Model
 {
@@ -20,4 +21,9 @@ class Country extends Model
         'latitude',
         'longitude',
     ];
+
+    public function economics(): HasOne
+    {
+        return $this->hasOne(CountryEconomic::class, 'country_id');
+    }
 }

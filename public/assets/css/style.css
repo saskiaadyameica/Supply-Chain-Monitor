@@ -907,3 +907,18 @@ body{
     }
 
 }
+
+.admin-grid{
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 22px;
+    align-items: stretch;
+}
+
+.admin-grid > a{
+    display: flex;
+}
+
+.admin-grid .overview-card{
+    width: 100%;
+}

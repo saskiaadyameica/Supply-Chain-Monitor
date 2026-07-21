@@ -15,18 +15,45 @@
 
         </div>
 
-<form action="{{ route('countries.sync') }}" method="POST">
+        <div class="d-flex gap-2">
 
-    @csrf
+            <form action="{{ route('countries.sync') }}" method="POST">
+                @csrf
 
-    <button type="submit" class="btn btn-pink">
+                <button type="submit" class="btn btn-pink">
+                    <i class="bi bi-arrow-repeat me-2"></i>
+                    Sync Countries
+                </button>
+            </form>
 
-        <i class="bi bi-arrow-repeat me-2"></i>
-        Sync Countries
+            <button
+                id="syncEconomicsBtn"
+                class="btn-pink">
+                Sync Economic Data
+            </button>
+            
+            <div id="syncStatus" class="mt-3" style="display:none;">
 
-    </button>
+            <div class="progress">
 
-</form>
+                <div
+                    id="syncBar"
+                    class="progress-bar progress-bar-striped progress-bar-animated"
+                    style="width:0%">
+
+                    0%
+
+                </div>
+
+            </div>
+
+            <small id="syncText">
+                Preparing...
+            </small>
+
+        </div>
+
+        </div>
 
     </div>
 
@@ -92,8 +119,15 @@
                             <th class="text-end" width="170">
                                 Population
                             </th>
+                            <th class="text-end">GDP</th>
 
-                        </tr>
+                            <th class="text-end">Inflation</th>
+
+                            <th class="text-end">Export</th>
+
+                            <th class="text-end">Import</th>
+                           
+                        </th>
 
                     </thead>
 
@@ -144,13 +178,71 @@
 
                             </td>
 
+                            <td class="text-end">
+
+                                @if($country->economics && $country->economics->gdp)
+
+                                    {{ number_format($country->economics->gdp, 0) }}
+
+                                @else
+
+                                    -
+
+                                @endif
+
+                            </td>
+
+                            <td class="text-end">
+
+                                @if($country->economics && $country->economics->inflation)
+
+                                    {{ number_format($country->economics->inflation, 2) }}%
+
+                                @else
+
+                                    -
+
+                                @endif
+
+                            </td>
+
+                            <td class="text-end">
+
+                                @if($country->economics && $country->economics->export)
+
+                                    {{ number_format($country->economics->export, 0) }}
+
+                                @else
+
+                                    -
+
+                                @endif
+
+                            </td>
+
+                            <td class="text-end">
+
+                                @if($country->economics && $country->economics->import)
+
+                                    {{ number_format($country->economics->import, 0) }}
+
+                                @else
+
+                                    -
+
+                                @endif
+
+                            </td>
+
+                            
+
                         </tr>
 
                         @empty
 
                         <tr>
 
-                            <td colspan="6" class="text-center py-5 text-secondary">
+                            <td colspan="9" class="text-center py-5 text-secondary">
 
                                 No country data available.
 
@@ -184,5 +276,65 @@
     </div>
 
 </div>
+
+<script>
+
+const totalCountries = {{ \App\Models\Country::count() }};
+
+async function syncBatch(offset = 0)
+{
+    const response = await fetch(
+        "{{ route('countries.syncEconomics') }}?offset=" + offset,
+        {
+            method: "POST",
+            headers: {
+                "X-CSRF-TOKEN": "{{ csrf_token() }}"
+            }
+        }
+    );
+
+    const data = await response.json();
+
+    let percent = Math.round((data.processed / data.total) * 100);
+
+    document.getElementById("syncBar").style.width = percent + "%";
+    document.getElementById("syncBar").innerHTML = percent + "%";
+
+    document.getElementById("syncText").innerHTML =
+        data.processed + " / " + data.total + " countries synchronized";
+
+    if (!data.finished) {
+
+        setTimeout(function () {
+
+            syncBatch(data.nextOffset);
+
+        }, 500);
+
+    } else {
+
+        document.getElementById("syncText").innerHTML =
+            "✅ Synchronization completed.";
+
+        setTimeout(function () {
+
+            location.reload();
+
+        }, 1000);
+
+    }
+}
+
+document.getElementById("syncEconomicsBtn").onclick=function(){
+
+    document.getElementById("syncStatus").style.display="block";
+
+    this.disabled=true;
+
+    syncBatch();
+
+}
+
+</script>
 
 @endsection
